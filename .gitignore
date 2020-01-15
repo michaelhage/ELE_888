@@ -1,0 +1,13 @@
+#Folder to ignore 
+
+
+#Files extension to ignore
+
+*.pdf
+*.aux
+*.log
+*.wav
+*.xml
+*.iml
+*.gz
+*.log
