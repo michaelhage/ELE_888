@@ -57,8 +57,4 @@ trainingSet = [irisdata_features(1:100,:) numericLabels(1:100,1) ];
 
 %% Lab1 experiments (include here)
 
-m = 1;
-n = 1;
-x = irisdata_features(m,n);
-
-[posteriors_x,g_x]=lab1(x,trainingSet);
+lab1(iri,trainingSet)
