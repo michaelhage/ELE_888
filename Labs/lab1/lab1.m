@@ -30,25 +30,29 @@ Pr2 = sum(la(:) == 2) / M;
 %% %%%%%Class-conditional probabilities%%%%%%%%%%%%%%%%%%%%%%%
 
 disp('Mean & Std for class 1 & 2');
-m11 = mean(x)  % mean of the class conditional density p(x/w1)
-std11 = % Standard deviation of the class conditional density p(x/w1)
+m11 = mean(f(1:50)); % mean of the class conditional density p(x/w1)
+std11 = std(f(1:50));% Standard deviation of the class conditional density p(x/w1)
 
-m12 = % mean of the class conditional density p(x/w2)
-std12= % Standard deviation of the class conditional density p(x/w2)
-
+m12 = mean(f(51:100));% mean of the class conditional density p(x/w2)
+std12= std(f(51:100));% Standard deviation of the class conditional density p(x/w2)
 
 disp(['Conditional probabilities for x=' num2str(x)]);
-cp11= % use the above mean, std and the test feature to calculate p(x/w1)
 
-cp12= % use the above mean, std and the test feature to calculate p(x/w2)
+% use the above mean, std and the test feature to calculate p(x/w1)
+cp11= @(x) (1/(sqrt(2*pi)*std11)) * exp(-((x-m11)/std11)^2/2);
+
+% use the above mean, std and the test feature to calculate p(x/w2)
+cp12= @(x) (1/(sqrt(2*pi)*std12)) * exp(-((x-m12)/std12)^2/2);
 
 %% %%%%%%Compute the posterior probabilities%%%%%%%%%%%%%%%%%%%%
 
 disp('Posterior prob. for the test feature');
 
-pos11= % p(w1/x) for the given test feature value
+% p(w1/x) for the given test feature value
+pos11= 
 
-pos12= % p(w2/x) for the given test feature value
+% p(w2/x) for the given test feature value
+pos12= 
 
 posteriors_x=
 
