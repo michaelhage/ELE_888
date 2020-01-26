@@ -49,17 +49,17 @@ pxw2= (1/(sqrt(2*pi)*std12)) * exp(-((x-m12)/std12)^2/2);
 disp('Posterior prob. for the test feature');
 
 % p(w1/x) for the given test feature value
-pos11= pxw1*Pr1;
+pos11= pxw1*
 
 % p(w2/x) for the given test feature value
-pos12= pxw2*Pr2;
+pos12= pw2x(x)
 
-posteriors_x= pos11-pos12;
+posteriors_x=
 
 %% %%%%%%Discriminant function for min error rate classifier%%%
 
 disp('Discriminant function for the test feature');
 
-g_x= pxw1-pxw2;% compute the g(x) for min err rate classifier.
+g_x= % compute the g(x) for min err rate classifier.
 
 
