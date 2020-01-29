@@ -55,13 +55,9 @@ trainingSet = [irisdata_features(1:100,:) numericLabels(1:100,1) ];
 
 %% Lab1 experiments (include here)
 
-x = irisdata_features(1:100,1); % for question 3
+x = irisdata_features(1:100,1);
 
 [posteriors_x,g_x]=lab1(x,trainingSet);
 
-%% Plots
 figure
-scatter(x,g_x)
-
-%% Threshold Value
-threshold_val = threshold(trainingSet);
+plot(poster
