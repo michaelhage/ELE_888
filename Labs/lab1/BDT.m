@@ -1,8 +1,4 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% ELE 888/ EE 8209: LAB 1: Bayesian Decision Theory
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-function [posteriors_x,g_x]=lab1(x,Training_Data)
+function [posteriors_x,g_x]=lab1(x,Training_Data, i)
 
 % x = individual sample to be tested (to identify its probable class label)
 % featureOfInterest = index of relevant feature (column) in Training_Data 
@@ -15,7 +11,7 @@ D=Training_Data;
 % D is MxN (M samples, N columns = N-1 features + 1 label)
 [M,N]=size(D);    
  
-f=D(:,2);  % feature samples
+f=D(:,i);  % feature samples
 la=D(:,N); % class labels
 
 

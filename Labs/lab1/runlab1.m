@@ -57,7 +57,7 @@ trainingSet = [irisdata_features(1:100,:) numericLabels(1:100,1) ];
 
 x = irisdata_features(1:100,2);
 
-[posteriors_x,g_x,m11,m12]=lab1(x,trainingSet);
+[posteriors_x,g_x]=lab1(x,trainingSet);
 
 figure
 scatter(x,g_x)
@@ -91,4 +91,7 @@ classes = (posteriors_x(1:length(x)) < posteriors_x(length(x)+1:end)) + 1;
 %% Question 4 - Threshold Value
 threshold_val = threshold(trainingSet);
 
-%% Question 5 - 
+%% Question 5 - Adjusting Threshold Value
+
+%% Question 6 - Sepal Length
+
