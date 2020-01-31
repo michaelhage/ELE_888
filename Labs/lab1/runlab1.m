@@ -55,9 +55,9 @@ trainingSet = [irisdata_features(1:100,:) numericLabels(1:100,1) ];
 
 %% Lab1 experiments (include here)
 
-x = irisdata_features(1:100,1);
+x = irisdata_features(1:100,2);
 
-[posteriors_x,g_x]=lab1(x,trainingSet);
+[posteriors_x,g_x,m11,m12]=lab1(x,trainingSet);
 
 figure
 scatter(x,g_x)

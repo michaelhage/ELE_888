@@ -4,7 +4,7 @@ function [thresholdVal] = threshold(D)
 
 [M,N]=size(D); 
 
-f=D(:,1);  % feature samples
+f=D(:,2);  % feature samples
 la=D(:,N); % class labels
 
 m11 = mean(f(la==1)); % mean of the class conditional density p(x/w1)
