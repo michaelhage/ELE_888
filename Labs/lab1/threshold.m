@@ -13,11 +13,17 @@ std11 = std(f(la==1));% Standard deviation of the class conditional density p(x/
 m12 = mean(f(la==2));% mean of the class conditional density p(x/w2)
 std12= std(f(la==2));% Standard deviation of the class conditional density p(x/w2)
 
-syms x;
-eqn = (1./(sqrt(2.*pi).*std11)) .* exp(-((x-m11)./std11).^2./2) - ...
-    (1./(sqrt(2*pi).*std12)) .* exp(-((x-m12)./std12).^2./2) == 0;
+eqn = @(x) (1./(sqrt(2.*pi).*std11)) .* exp(-((x-m11)./std11).^2./2) - ...
+    (1./(sqrt(2*pi).*std12)) .* exp(-((x-m12)./std12).^2./2);
 
-thresholdVal = solve(eqn,x);
+minVal = min(f);
+maxVal = max(f);
+
+x = minVal:0.001:maxVal;
+
+thresholdMat = eqn(x);
+[minVal, i]= min(abs(thresholdMat));
+
+thresholdVal = x(i);
 
 end
-

@@ -55,13 +55,40 @@ trainingSet = [irisdata_features(1:100,:) numericLabels(1:100,1) ];
 
 %% Lab1 experiments (include here)
 
-x = irisdata_features(1:100,1); % for question 3
+x = irisdata_features(1:100,1);
 
 [posteriors_x,g_x]=lab1(x,trainingSet);
 
-%% Plots
 figure
 scatter(x,g_x)
 
-%% Threshold Value
+figure
+subplot(1,2,1)
+scatter(x,posteriors_x(1:length(x)))
+subplot(1,2,2)
+scatter(x,posteriors_x(length(x)+1:end))
+
+%% Question 3 - Class Identification
+
+x = [3.3 4.4 5.0 5.7 6.3];
+
+[posteriors_x,g_x]=lab1(x,trainingSet);
+
+figure
+scatter(x,g_x)
+
+figure
+subplot(1,2,1)
+scatter(x,posteriors_x(1:length(x)))
+subplot(1,2,2)
+scatter(x,posteriors_x(length(x)+1:end))
+
+% This only works for a dichrotomizer
+classes = (posteriors_x(1:length(x)) < posteriors_x(length(x)+1:end)) + 1;
+
+% Display the array x and their classes
+
+%% Question 4 - Threshold Value
 threshold_val = threshold(trainingSet);
+
+%% Question 5 - 
