@@ -89,9 +89,10 @@ classes = (posteriors_x(1:length(x)) < posteriors_x(length(x)+1:end)) + 1;
 % Display the array x and their classes
 
 %% Question 4 - Threshold Value
-threshold_val = threshold(trainingSet);
 
+threshold_val = threshold(trainingSet);
 %% Question 5 - Adjusting Threshold Value
 
+threshold_val = threshold(trainingSet(25:100,:))
 %% Question 6 - Sepal Length
 

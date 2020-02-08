@@ -1,4 +1,4 @@
-function [posteriors_x,g_x]=lab1(x,Training_Data, i)
+function [posteriors_x,g_x]=BDT(x,Training_Data, i)
 
 % x = individual sample to be tested (to identify its probable class label)
 % featureOfInterest = index of relevant feature (column) in Training_Data 
