@@ -24,17 +24,17 @@ la=D(:,N); % class labels
 % Hint: use the commands "find" and "length"
 
 disp('Prior probabilities:');
-Pr1 = sum(la(:) == 1) / M;
-Pr2 = sum(la(:) == 2) / M;
+Pr1 = sum(la(:) == 1) / M
+Pr2 = sum(la(:) == 2) / M
 
 %% %%%%%Class-conditional probabilities%%%%%%%%%%%%%%%%%%%%%%%
 
 disp('Mean & Std for class 1 & 2');
-m11 = mean(f(la==1)); % mean of the class conditional density p(x/w1)
-std11 = std(f(la==1));% Standard deviation of the class conditional density p(x/w1)
+m11 = mean(f(la==1)) % mean of the class conditional density p(x/w1)
+std11 = std(f(la==1))% Standard deviation of the class conditional density p(x/w1)
 
-m12 = mean(f(la==2));% mean of the class conditional density p(x/w2)
-std12= std(f(la==2));% Standard deviation of the class conditional density p(x/w2)
+m12 = mean(f(la==2))% mean of the class conditional density p(x/w2)
+std12= std(f(la==2))% Standard deviation of the class conditional density p(x/w2)
 
 % disp(['Conditional probabilities for x=' num2str(x)]);
 
