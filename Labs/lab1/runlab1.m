@@ -90,9 +90,25 @@ classes = (posteriors_x(1:length(x)) < posteriors_x(length(x)+1:end)) + 1;
 
 %% Question 4 - Threshold Value
 
-threshold_val = threshold(trainingSet);
+threshold_val = threshold(trainingSet)
 %% Question 5 - Adjusting Threshold Value
 
 threshold_val = threshold(trainingSet(25:100,:))
+
 %% Question 6 - Sepal Length
+x = [3.3 4.4 5.0 5.7 6.3];
+
+[posteriors_x,g_x]=BDT(x,trainingSet, 1);
+
+figure
+scatter(x,g_x)
+
+figure
+subplot(1,2,1)
+scatter(x,posteriors_x(1:length(x)))
+subplot(1,2,2)
+scatter(x,posteriors_x(length(x)+1:end))
+
+% This only works for a dichrotomizer
+classes = (posteriors_x(1:length(x)) < posteriors_x(length(x)+1:end)) + 1
 
