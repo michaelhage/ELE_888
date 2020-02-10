@@ -96,7 +96,7 @@ threshold_val_ori = threshold(trainingSet);
 threshold_val_adj = threshold(trainingSet(25:100,:))
 
 disp(["The threshold value has skewed towards the mean of class 2; Original: " threshold_val_ori " Skewed: " threshold_val_adj])
-disp("This was done by omitting certain values from class 1, therby reducing the prior probability of class 1 and increasing the prior probability of class 2, therefore skweing the threshold value")
+disp("This was done by omitting certain values from class 1, therby reducing ")
 
 %% Question 6 - Sepal Length
 x = [3.3 4.4 5.0 5.7 6.3];
@@ -115,6 +115,3 @@ scatter(x,posteriors_x(length(x)+1:end))
 % This only works for a dichrotomizer
 classes = (posteriors_x(1:length(x)) < posteriors_x(length(x)+1:end)) + 1
 
-%% Part 2
-
-%%
