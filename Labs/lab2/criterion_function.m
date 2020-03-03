@@ -35,7 +35,8 @@ for iter = 1:300
     
     aws(iter+1,:) = aws(iter,:) - offset;
     
-    if abs(offset) < theta
+    if abs(sum(offset)) <= theta
+        disp("iterations until convergence: " + num2str(iter))
         break;
     end
 end
