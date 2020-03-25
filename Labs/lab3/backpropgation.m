@@ -15,7 +15,7 @@ b = 1;
 
 % set sigmoid functions
 f = @(x) a * tanh(b * x);
-f_d = @(x) a * (1 - b*tanh(b * x)^2);
+f_d = @(x) a * b * sech( b * x );
 
 % set max iterations
 epoch_max = 1000;

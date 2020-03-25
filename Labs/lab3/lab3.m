@@ -76,8 +76,8 @@ setA = wine(wine_labels(:) == labels(1),:);
 setB = wine(wine_labels(:) == labels(2),:);
 
 % create training set and testing set
-trainingSet = [setA(1:size(setA,1)/2,:) ; setB(1:size(setB,1)/2,:)];
-testingSet = [setA(size(setA,1)/2:end,:) ; setB(size(setB,1)/2:end,:)];
+trainingSet = [setA(1:size(setA,1)/2,:) ; setB(1:size(setA,1)/2,:)];
+testingSet = [setA(size(setA,1)/2:end,:) ; setB(size(setA,1)/2:end,:)];
 
 input1 = trainingSet(:,2).';
 input2 = trainingSet(:,3).';
