@@ -2,7 +2,7 @@
 
 
 #Files extension to ignore
-
+*.asv
 *.pdf
 *.aux
 *.log
