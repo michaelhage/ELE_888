@@ -10,7 +10,7 @@ input2 = [-1 1 -1 1].';
 expected = [-1 1 1 -1].';
 
 % perform gradient descent
-[w, gradient] = backpropagation(input1, input2, expected);
+[w, gradient, y_bar] = backpropagation(input1, input2, expected);
 
 % initialize paramters
 a = 1;
@@ -95,43 +95,45 @@ input2 = trainingSet(:,3);
 expected = trainingSet(:,1);
 
 % computing the back propagation algorithm
-[w, gradient] = backpropagation(input1, input2, expected);
+[w, gradient, y_bar] = backpropagation(input1, input2, expected);
 
-% creating testing set inputs
-input1 = testingSet(:,2);
-input2 = testingSet(:,3);
-expected = testingSet(:,1);
-
-% initializing variables
-a = 1;
-b = 1;
-f = @(x) a * tanh(b * x);
-
-n = length(input1);
-
-% creating input
-input = [ones(n,1) input1 input2];
-
-% computing first two neurons
-net1 = input*w1;
-net2 = input*w2;
-
-% calculating sigmoid function
-f1 = f(net1);
-f2 = f(net2);
-
-% computing final neuron
-netz = [ones(n,1) f1 f2]*wz;
-
-% calculating sigmoid function which decides the class
-output = f(netz);
-
-disp("this is the result")
-result = output - expected;
+% % creating testing set inputs
+% input1 = testingSet(:,2);
+% input2 = testingSet(:,3);
+% expected = testingSet(:,1);
+% 
+% % initializing variables
+% a = 1;
+% b = 1;
+% f = @(x) a * tanh(b * x);
+% 
+% n = length(input1);
+% 
+% % creating input
+% input = [ones(n,1) input1 input2];
+% 
+% % computing first two neurons
+% net1 = input*w1;
+% net2 = input*w2;
+% 
+% % calculating sigmoid function
+% f1 = f(net1);
+% f2 = f(net2);
+% 
+% % computing final neuron
+% netz = [ones(n,1) f1 f2]*wz;
+% 
+% % calculating sigmoid function which decides the class
+% output = f(netz);
+% 
+% disp("this is the result")
+% result = output - expected;
 
 % plot the data
 figure
-scatter(trainingSet(:,2), trainingSet(:,3))
+scatter(setA(:,2), setA(:,3),'ro')
+hold on
+scatter(setB(:,2), setB(:,3),'b*')
 
 % plot the gradient function
 figure

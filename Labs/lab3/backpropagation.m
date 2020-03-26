@@ -1,18 +1,17 @@
-function [w, g] = backpropagation(input1, input2, expected)
+function [w, g, y_bar] = backpropagation(input1, input2, expected)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
 n = length(input1);
 
 % set paramters
-nu = 1;
+nu = 0.1;
 theta = 0.001;
 a = 1;
 b = 1;
 
-% set sigmoid functions
 f = @(x) a * tanh(b * x);
-f_d = @(x) a * (1 - tan(b * x));
+f_d = @(x) a *( 1 - b * tanh(b * x).^2 );
 
 % set max iterations
 epoch_max = 1000;
@@ -26,48 +25,49 @@ gradient = zeros(epoch_max,1);
 % w1 - weight for neuron 1
 % w2 - weight for neuron 2
 % w3 - weight for determining neuron
-w1 = rand(3,1);
-w2 = rand(3,1);
-wz = rand(3,1);
+w1 = 2*rand(3,2) -1;
+wz = 2*rand(3,1) -1;
 
 
 for i = 1:epoch_max
         
 %   creating input
-    input = [ones(n,1) input1 input2];
+    X = [ones(n,1) input1 input2];
 %   computing first two neurons
-    net1 = input*w1;
-    net2 = input*w2;
+    net1 = X*w1;
        
 %   calculating sigmoid function
-    f1 = f(net1);
-    f2 = f(net2);
+    Z = f(net1);
+    Z_bar = [ones(n,1) , Z];
         
 %   computing final neuron
-    netz = [ones(n,1) f1 f2]*wz;
+    netz = Z_bar*wz;
     
 %   calculating sigmoid function which decides the class
-    output = f(netz);
+    y_bar = f(netz);
     
 %   computing error
-    delta_z = ( expected - output ) .* f_d(netz);
-    delta_1 = wz(2) * delta_z .* f_d(net1);
-    delta_2 = wz(3) * delta_z .* f_d(net2);
-        
+    ez = (expected-y_bar);
+    delta_z = ez .* f_d(netz);
+%     delta = wz(2) * delta_z .* f_d(net1);
+%     delta_2 = wz(3) * delta_z .* f_d(net2);
+     e1 = delta_z .* wz(2,:).';
+     delta1 = e1 .* f_d(Z);
+     
 %   adding to overall error
-    delta_w1 = nu * delta_1 .* input;
-    delta_w2 = nu * delta_2 .* input;
-    delta_wz = nu * delta_z .* [ones(n,1) f1 f2];
+    w1 = w1 + nu*X.'*delta1;
+    wz = wz + nu*Z_bar.'*delta_z;
+%     delta_w1 = nu * delta_1 .* input;
+%     delta_w2 = nu * delta_2 .* input;
+%     delta_wz = nu * delta_z .* [ones(n,1) f1 f2];
 %     delta_wz = nu * delta_z .* [expected f1 f2];
 
-    w1 = w1 + sum(delta_w1,1).';
-    w2 = w2 + sum(delta_w2,1).';
-    wz = wz + sum(delta_wz,1).';
+%     w1 = w1 + sum(delta_w1,1).';
+%     w2 = w2 + sum(delta_w2,1).';
+%     wz = wz + sum(delta_wz,1).';
     
-    gradient(i) = sum( (expected - output).^2 ) / 2;
-    
-    display(gradient(i))
-    
+    gradient(i) = sum( (expected - y_bar).^2 ) / 2;
+   
     if(gradient(i) < theta)
 %         disp(gradient)
         disp("number of epoches: " + num2str(i))
@@ -82,7 +82,7 @@ for i = 1:epoch_max
 end
 
 g = gradient(1:i);
-w = [w1 w2 wz];
+w = [w1 wz];
 
 end
 
