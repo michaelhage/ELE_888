@@ -3,37 +3,40 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% XOR problem
 clear
+clc
 % inputs to function
-input1 = [-1 -1 1 1];
-input2 = [-1 1 -1 1];
-expected = [-1 1 1 -1];
+input1 = [-1 -1 1 1].';
+input2 = [-1 1 -1 1].';
+expected = [-1 1 1 -1].';
 
 % perform gradient descent
-[w, gradient] = backpropgation(input1, input2, expected);
+[w, gradient] = backpropagation(input1, input2, expected);
 
 % initialize paramters
 a = 1;
 b = 1;
 f = @(x) a * tanh(b * x);
+n = length(input1.');
 
-% check 
-for i = 1:size(input1,2)
-     input = [1 input1(i) input2(i)];
-        
-%    computing first two neurons
-    net1 = dot(w(1,:) , input);
-    net2 = dot(w(2,:) , input);
+w1 = w(:,1);
+w2 = w(:,2);
+wz = w(:,3);
 
-%    calculating sigmoid function
-    f1 = f(net1);
-    f2 = f(net2);
+% creating input
+input = [ones(n,1) input1 input2];
+% computing first two neurons
+net1 = input*w1;
+net2 = input*w2;
 
-%    computing final neuron
-    netz = dot(w(3,:) , [1 f1 f2]);
+% calculating sigmoid function
+f1 = f(net1);
+f2 = f(net2);
 
-%    calculating sigmoid function
-    result(i) = f(netz);
-end
+% computing final neuron
+netz = [ones(n,1) f1 f2]*wz;
+
+% calculating sigmoid function which decides the class
+output = f(netz);
 
 % plot gradient function over epoches
 figure
@@ -56,6 +59,8 @@ plot(gradient)
 % 12. OD280/OD315 of diluted wines
 % 13. Proline
 
+clc
+
 % read table into array
 T = table2array(readtable('wine.csv'));
 
@@ -75,42 +80,59 @@ labels = unique(wine_labels);
 setA = wine(wine_labels(:) == labels(1),:);
 setB = wine(wine_labels(:) == labels(2),:);
 
-% create training set and testing set
+% create training set and testing set split ratios for each set
 split_ratio = 0.7;
 m1 = floor((size(setA,1)*split_ratio));
 m2 = floor((size(setB,1)*split_ratio));
 
+% creating the testinfg and training sets
 trainingSet = [setA(1:m1,:) ; setB(1:m2,:)];
 testingSet = [setA(m1:end,:) ; setB(m2:end,:)];
 
+% creating training set inputs
 input1 = trainingSet(:,2);
 input2 = trainingSet(:,3);
 expected = trainingSet(:,1);
 
+% computing the back propagation algorithm
 [w, gradient] = backpropagation(input1, input2, expected);
 
-% input1 = testingSet(:,2);
-% input2 = testingSet(:,3);
-% expected = testingSet(:,1);
+% creating testing set inputs
+input1 = testingSet(:,2);
+input2 = testingSet(:,3);
+expected = testingSet(:,1);
 
-% for i = 1:size(input1,2)
-%      input = [1 input1(i) input2(i)];
-%         
-% %    computing first two neurons
-%     net1 = dot(w(1,:) , input);
-%     net2 = dot(w(2,:) , input);
-% 
-% %    calculating sigmoid function
-%     f1 = f(net1);
-%     f2 = f(net2);
-% 
-% %    computing final neuron
-%     netz = dot(w(3,:) , [1 f1 f2]);
-% 
-% %    calculating sigmoid function
-%     result(i) = f(netz);
-% end
+% initializing variables
+a = 1;
+b = 1;
+f = @(x) a * tanh(b * x);
 
-% plot gradient function over epoches
+n = length(input1);
+
+% creating input
+input = [ones(n,1) input1 input2];
+
+% computing first two neurons
+net1 = input*w1;
+net2 = input*w2;
+
+% calculating sigmoid function
+f1 = f(net1);
+f2 = f(net2);
+
+% computing final neuron
+netz = [ones(n,1) f1 f2]*wz;
+
+% calculating sigmoid function which decides the class
+output = f(netz);
+
+disp("this is the result")
+result = output - expected;
+
+% plot the data
+figure
+scatter(trainingSet(:,2), trainingSet(:,3))
+
+% plot the gradient function
 figure
 plot(gradient)

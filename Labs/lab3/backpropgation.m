@@ -2,11 +2,6 @@ function [w, g] = backpropgation(input1, input2, expected)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
-% inputs to function
-% input1 = [-1 -1 1 1];
-% input2 = [-1 1 -1 1];
-% expected = [-1 1 1 -1];
-
 % set paramters
 nu = 0.1;
 theta = 0.001;

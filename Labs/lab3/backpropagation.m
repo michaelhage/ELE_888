@@ -2,12 +2,7 @@ function [w, g] = backpropagation(input1, input2, expected)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
-% inputs to function
-% input1 = [-1 -1 1 1];
-% input2 = [-1 1 -1 1];
-% expected = [-1 1 1 -1];
 n = length(input1);
-
 
 % set paramters
 nu = 1;
@@ -17,10 +12,11 @@ b = 1;
 
 % set sigmoid functions
 f = @(x) a * tanh(b * x);
-f_d = @(x) a * b * sech( b * x );
+f_d = @(x) a * (1 - tan(b * x));
 
 % set max iterations
 epoch_max = 1000;
+gradient = zeros(epoch_max,1);
 
 % initialize weights 
 % row 1 - bias (input always 1)
@@ -36,7 +32,6 @@ wz = rand(3,1);
 
 
 for i = 1:epoch_max
-%     for j = 1:size(input1,2)
         
 %   creating input
     input = [ones(n,1) input1 input2];
@@ -51,8 +46,9 @@ for i = 1:epoch_max
 %   computing final neuron
     netz = [ones(n,1) f1 f2]*wz;
     
-%   calculating sigmoid function
-    output = f(netz);    
+%   calculating sigmoid function which decides the class
+    output = f(netz);
+    
 %   computing error
     delta_z = ( expected - output ) .* f_d(netz);
     delta_1 = wz(2) * delta_z .* f_d(net1);
@@ -69,7 +65,9 @@ for i = 1:epoch_max
     wz = wz + sum(delta_wz,1).';
     
     gradient(i) = sum( (expected - output).^2 ) / 2;
+    
     display(gradient(i))
+    
     if(gradient(i) < theta)
 %         disp(gradient)
         disp("number of epoches: " + num2str(i))
@@ -82,8 +80,9 @@ for i = 1:epoch_max
         break
     end
 end
-g = gradient(:);
-w = [w1 ; w2 ; wz];
+
+g = gradient(1:i);
+w = [w1 w2 wz];
 
 end
 
