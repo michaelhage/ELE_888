@@ -76,36 +76,40 @@ setA = wine(wine_labels(:) == labels(1),:);
 setB = wine(wine_labels(:) == labels(2),:);
 
 % create training set and testing set
-trainingSet = [setA(1:size(setA,1)/2,:) ; setB(1:size(setA,1)/2,:)];
-testingSet = [setA(size(setA,1)/2:end,:) ; setB(size(setA,1)/2:end,:)];
+split_ratio = 0.7;
+m1 = floor((size(setA,1)*split_ratio));
+m2 = floor((size(setB,1)*split_ratio));
 
-input1 = trainingSet(:,2).';
-input2 = trainingSet(:,3).';
-expected = trainingSet(:,1).';
+trainingSet = [setA(1:m1,:) ; setB(1:m2,:)];
+testingSet = [setA(m1:end,:) ; setB(m2:end,:)];
 
-[w, gradient] = backpropgation(input1, input2, expected);
+input1 = trainingSet(:,2);
+input2 = trainingSet(:,3);
+expected = trainingSet(:,1);
 
-input1 = testingSet(:,2).';
-input2 = testingSet(:,3).';
-expected = testingSet(:,1).';
+[w, gradient] = backpropagation(input1, input2, expected);
 
-for i = 1:size(input1,2)
-     input = [1 input1(i) input2(i)];
-        
-%    computing first two neurons
-    net1 = dot(w(1,:) , input);
-    net2 = dot(w(2,:) , input);
+% input1 = testingSet(:,2);
+% input2 = testingSet(:,3);
+% expected = testingSet(:,1);
 
-%    calculating sigmoid function
-    f1 = f(net1);
-    f2 = f(net2);
-
-%    computing final neuron
-    netz = dot(w(3,:) , [1 f1 f2]);
-
-%    calculating sigmoid function
-    result(i) = f(netz);
-end
+% for i = 1:size(input1,2)
+%      input = [1 input1(i) input2(i)];
+%         
+% %    computing first two neurons
+%     net1 = dot(w(1,:) , input);
+%     net2 = dot(w(2,:) , input);
+% 
+% %    calculating sigmoid function
+%     f1 = f(net1);
+%     f2 = f(net2);
+% 
+% %    computing final neuron
+%     netz = dot(w(3,:) , [1 f1 f2]);
+% 
+% %    calculating sigmoid function
+%     result(i) = f(netz);
+% end
 
 % plot gradient function over epoches
 figure
