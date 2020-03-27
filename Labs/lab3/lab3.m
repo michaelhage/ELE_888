@@ -107,7 +107,7 @@ setB = wine(wine_labels(:) == labels(2),:);
 % setB(:,2:3) = normalize(setB(:,2:3));
 
 % create training set and testing set split ratios for each set
-split_ratio = 0.4;
+split_ratio = 0.6;
 m1 = floor((size(setA,1)*split_ratio));
 m2 = floor((size(setB,1)*split_ratio));
 
@@ -126,9 +126,9 @@ eta = 0.1;
 [w, gradient] = backpropgation(input1, input2, expected, eta);
 
 % creating testing set inputs
-% input1 = testingSet(:,2);
-% input2 = testingSet(:,3);
-% expected = testingSet(:,1);
+input1 = testingSet(:,2);
+input2 = testingSet(:,3);
+expected = testingSet(:,1);
 
 % initializing variables
 a = 1;
@@ -162,6 +162,14 @@ disp('Expected Output')
 
 disp("Error is approximately: " + num2str(gradient( length(gradient) )))
 
+% thresholding output to either -1 or 1
+output_t = 2 * heaviside(output) - 1;
+
+disp("Expected Output After Thresholding")
+[expected output_t]
+
+disp('Items Misclassified are: ')
+misclassified = sum(abs(expected - output_t))/2
 
 % plot the data
 figure
