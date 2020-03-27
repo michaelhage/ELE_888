@@ -5,7 +5,7 @@ function [w, g, y_bar] = backpropagation(input1, input2, expected)
 n = length(input1);
 
 % set paramters
-nu = 0.1;
+eta = 0.1;
 theta = 0.001;
 a = 1;
 b = 1;
@@ -55,8 +55,8 @@ for i = 1:epoch_max
      delta1 = e1 .* f_d(Z);
      
 %   adding to overall error
-    w1 = w1 + nu*X.'*delta1;
-    wz = wz + nu*Z_bar.'*delta_z;
+    w1 = w1 + eta*X.'*delta1;
+    wz = wz + eta*Z_bar.'*delta_z;
 %     delta_w1 = nu * delta_1 .* input;
 %     delta_w2 = nu * delta_2 .* input;
 %     delta_wz = nu * delta_z .* [ones(n,1) f1 f2];
@@ -71,12 +71,6 @@ for i = 1:epoch_max
     if(gradient(i) < theta)
 %         disp(gradient)
         disp("number of epoches: " + num2str(i))
-%         disp(output)
-%         size(gradient)
-%         display('final weights')
-%         display('w1: '  num2str(w1))
-%         display('w2: ' + num2str(w2))
-%         display('wz: ' + num2str(wz))
         break
     end
 end

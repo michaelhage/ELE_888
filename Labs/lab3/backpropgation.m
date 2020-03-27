@@ -1,19 +1,20 @@
-function [w, g] = backpropgation(input1, input2, expected)
+function [w, g] = backpropgation(input1, input2, expected, eta)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
 % set paramters
-nu = 0.1;
-theta = 0.001;
+% eta = 0.01;
+theta = 0.01;
 a = 1;
 b = 1;
+n = length(input1);
 
 % set sigmoid functions
 f = @(x) a * tanh(b * x);
-f_d = @(x) a * b * sech( b * x );
+f_d = @(x) a*(1 - tanh(b * x).^2);
 
 % set max iterations
-epoch_max = 1000;
+epoch_max = 5000;
 
 % initialize weights 
 % row 1 - bias (input always 1)
@@ -23,27 +24,27 @@ epoch_max = 1000;
 % w1 - weight for neuron 1
 % w2 - weight for neuron 2
 % w3 - weight for determining neuron
-w1 = rand(1,3);
-w2 = rand(1,3);
-wz = rand(1,3);
+w1 = 2*rand(3,1)-1;
+w2 = 2*rand(3,1)-1;
+wz = 2*rand(3,1)-1;
 
 % output of neural function
-output = zeros(1,size(input1,2));
+output = zeros(n,1);
 
 % initialize temporary variables
 delta(3) = 0;
 delta_w(3,3) = 0;
-gradient(1) = 0;
+gradient(epoch_max) = 0;
 
 for i = 1:epoch_max
     
-    output(:) = 0;
+%     output(:) = 0;
     delta_w(:,:) = 0;
     
-    for j = 1:size(input1,2)
+    for j = 1:n
         
 %         creating input
-        input = [1 input1(j) input2(j)];
+        input = [1 input1(j) input2(j)].';
         
 %         computing first two neurons
         net1 = dot(w1 , input);
@@ -66,16 +67,15 @@ for i = 1:epoch_max
         delta(2) = f_d(net2) * wz(3) * delta(3);
         
 %         adding to overall error
-        delta_w(1,:) = delta_w(1,:) + nu * delta(1) * input;
-        delta_w(2,:) = delta_w(2,:) + nu * delta(2) * input;
-        delta_w(3,:) = delta_w(3,:) + nu * delta(3) * [1 f1 f2];
-%         delta_w(3,:) = delta_w(3,:) + nu * delta(3) * [expected(j) f1 f2];
+        delta_w(:,1) = delta_w(:,1) + eta * delta(1) * input;
+        delta_w(:,2) = delta_w(:,2) + eta * delta(2) * input;
+        delta_w(:,3) = delta_w(:,3) + eta * delta(3) * [1 f1 f2].';
         
     end
     
-    w1 = w1 + delta_w(1,:);
-    w2 = w2 + delta_w(2,:);
-    wz = wz + delta_w(3,:);
+    w1 = w1 + delta_w(:,1);
+    w2 = w2 + delta_w(:,2);
+    wz = wz + delta_w(:,3);
     
     gradient(i) = sum( (expected - output).^2 ) / 2;
 %     output_z(i,:) = output(:);
@@ -91,8 +91,8 @@ for i = 1:epoch_max
         break
     end
 end
-g = gradient(:);
-w = [w1 ; w2 ; wz];
+g = gradient(1:i);
+w = [w1 w2 wz];
 
 end
 
