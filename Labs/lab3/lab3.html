@@ -1,0 +1,610 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>lab3</title><meta name="generator" content="MATLAB 9.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-03-27"><meta name="DC.source" content="lab3.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">XOR problem</a></li><li><a href="#3">Wine Dataset</a></li></ul></div><pre class="codeinput"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">% LAB 3, Multilayer Neural Networks</span>
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+</pre><h2 id="2">XOR problem</h2><pre class="codeinput">clear
+clc
+<span class="comment">% inputs to function</span>
+input1 = [-1 -1 1 1].';
+input2 = [-1 1 -1 1].';
+expected = [-1 1 1 -1].';
+eta = 0.1;
+
+<span class="comment">% perform gradient descent</span>
+[w, gradient] = backpropgation(input1, input2, expected, eta);
+
+<span class="comment">% initialize paramters</span>
+a = 1;
+b = 1;
+f = @(x) a * tanh(b * x);
+n = length(input1.');
+
+w1 = w(:,1);
+w2 = w(:,2);
+wz = w(:,3);
+
+<span class="comment">% creating input</span>
+input = [ones(n,1) input1 input2];
+<span class="comment">% computing first two neurons</span>
+net1 = input*w1;
+net2 = input*w2;
+
+<span class="comment">% calculating sigmoid function</span>
+f1 = f(net1);
+f2 = f(net2);
+
+<span class="comment">% computing final neuron</span>
+netz = [ones(n,1) f1 f2]*wz;
+
+<span class="comment">% calculating sigmoid function which decides the class</span>
+output = f(netz);
+
+disp(<span class="string">'Expected Output'</span>)
+[expected output]
+
+<span class="comment">% plot the data</span>
+figure
+scatter(input1, input2, <span class="string">'b*'</span>)
+hold <span class="string">on</span>
+min_val = -2;
+max_val = 2;
+<span class="comment">% min_val = min([setA(:,2); setB(:,2)]);</span>
+<span class="comment">% max_val = max([setA(:,2); setB(:,2)]);</span>
+r = linspace(min_val, max_val, 50);
+d1 = w(1,1) / w(3,1) * r + w(1,1) / w(3,1);
+d2 = w(2,2) / w(3,2) * r + w(1,2) / w(3,2);
+plot(r, d1)
+hold <span class="string">on</span>
+plot(r, d2)
+
+<span class="comment">% plot gradient function over epoches</span>
+figure
+plot(gradient)
+</pre><pre class="codeoutput">number of epoches: 294
+Expected Output
+
+ans =
+
+   -1.0000   -0.9216
+    1.0000    0.9415
+    1.0000    0.9405
+   -1.0000   -0.9179
+
+</pre><img vspace="5" hspace="5" src="lab3_01.png" alt=""> <img vspace="5" hspace="5" src="lab3_02.png" alt=""> <h2 id="3">Wine Dataset</h2><p>Attribute Information for WINE data:</p><p>1.  Alcohol 2.  Malic acid 3.  Ash 4.  Alcalinity of ash 5.  Magnesium 6.  Total phenols 7.  Flavanoids 8.  Nonflavanoid phenols 9.  Proanthocyanins 10. Color intensity 11. Hue 12. OD280/OD315 of diluted wines 13. Proline</p><pre class="codeinput">clc
+
+<span class="comment">% read table into array</span>
+T = table2array(readtable(<span class="string">'wine.csv'</span>));
+
+<span class="comment">% dividing table into section</span>
+wine = [T((T(:,1)==1),1:3); T((T(:,1)==3),1:3)];
+
+<span class="comment">% replace class 3 with -1 value</span>
+wine( wine(:,1)==3 ) = -1;
+
+<span class="comment">% seperate labels and features</span>
+wine_labels = wine(:,1);
+wine_features = wine(:,2:3);
+
+wine_features = normalize(wine_features);
+
+labels = unique(wine_labels);
+
+wine = [wine_labels wine_features];
+
+<span class="comment">% seperate the two sets</span>
+setA = wine(wine_labels(:) == labels(1),:);
+setB = wine(wine_labels(:) == labels(2),:);
+
+<span class="comment">% setA(:,2:3) = normalize(setA(:,2:3));</span>
+<span class="comment">% setB(:,2:3) = normalize(setB(:,2:3));</span>
+
+<span class="comment">% create training set and testing set split ratios for each set</span>
+split_ratio = 0.6;
+m1 = floor((size(setA,1)*split_ratio));
+m2 = floor((size(setB,1)*split_ratio));
+
+<span class="comment">% creating the testinfg and training sets</span>
+trainingSet = [setA(1:m1,:) ; setB(1:m2,:)];
+testingSet = [setA(m1:end,:) ; setB(m2:end,:)];
+
+<span class="comment">% creating training set inputs</span>
+input1 = trainingSet(:,2);
+input2 = trainingSet(:,3);
+expected = trainingSet(:,1);
+eta = 0.1;
+
+<span class="comment">% computing the back propagation algorithm</span>
+<span class="comment">% [w, gradient, y_bar] = backpropagation(input1, input2, expected);</span>
+[w, gradient] = backpropgation(input1, input2, expected, eta);
+
+<span class="comment">% creating testing set inputs</span>
+input1 = testingSet(:,2);
+input2 = testingSet(:,3);
+expected = testingSet(:,1);
+
+<span class="comment">% initializing variables</span>
+a = 1;
+b = 1;
+f = @(x) a * tanh(b * x);
+
+n = length(input1);
+
+<span class="comment">% creating input</span>
+input = [ones(n,1) input1 input2];
+
+<span class="comment">% computing first two neurons</span>
+net1 = input*w1;
+net2 = input*w2;
+
+<span class="comment">% calculating sigmoid function</span>
+f1 = f(net1);
+f2 = f(net2);
+
+<span class="comment">% computing final neuron</span>
+netz = [ones(n,1) f1 f2]*wz;
+
+<span class="comment">% calculating sigmoid function which decides the class</span>
+output = f(netz);
+
+disp(<span class="string">"this is the result"</span>)
+result = heaviside(output)
+
+disp(<span class="string">'Expected Output'</span>)
+[expected output]
+
+disp(<span class="string">"Error is approximately: "</span> + num2str(gradient( length(gradient) )))
+
+<span class="comment">% thresholding output to either -1 or 1</span>
+output_t = 2 * heaviside(output) - 1;
+
+disp(<span class="string">"Expected Output After Thresholding"</span>)
+[expected output_t]
+
+disp(<span class="string">'Items Misclassified are: '</span>)
+misclassified = sum(abs(expected - output_t))/2
+
+<span class="comment">% plot the data</span>
+figure
+scatter(setA(:,2), setA(:,3),<span class="string">'ro'</span>)
+hold <span class="string">on</span>
+scatter(setB(:,2), setB(:,3),<span class="string">'b*'</span>)
+hold <span class="string">on</span>
+<span class="comment">% min_val = -5;</span>
+<span class="comment">% max_val = 5;</span>
+min_val = min([setA(:,2); setB(:,2)]);
+max_val = max([setA(:,2); setB(:,2)]);
+r = linspace(min_val, max_val, 50);
+d1 = w(1,1) / w(3,1) * r + w(1,1) / w(3,1);
+d2 = w(2,2) / w(3,2) * r + w(1,2) / w(3,2);
+plot(r, d1)
+hold <span class="string">on</span>
+plot(r, d2)
+
+<span class="comment">% plot the gradient function</span>
+figure
+plot(gradient)
+</pre><pre class="codeoutput">number of epoches: 5000
+this is the result
+
+result =
+
+     0
+     1
+     1
+     1
+     0
+     1
+     1
+     1
+     0
+     0
+     1
+     1
+     0
+     0
+     0
+     0
+     0
+     0
+     0
+     1
+     0
+     1
+     1
+     0
+     0
+     0
+     0
+     1
+     0
+     1
+     1
+     0
+     0
+     0
+     1
+     1
+     1
+     0
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+     1
+
+Expected Output
+
+ans =
+
+   -1.0000   -0.7202
+   -1.0000    0.6419
+   -1.0000    0.5066
+   -1.0000    0.6487
+   -1.0000   -0.0462
+   -1.0000    0.9081
+   -1.0000    0.9453
+   -1.0000    0.6199
+   -1.0000   -0.9204
+   -1.0000   -0.0097
+   -1.0000    0.9181
+   -1.0000    0.9274
+   -1.0000   -0.8742
+   -1.0000   -0.9028
+   -1.0000   -0.7578
+   -1.0000   -0.3508
+   -1.0000   -0.9431
+   -1.0000   -0.2663
+   -1.0000   -0.4889
+   -1.0000    0.8804
+   -1.0000   -0.9375
+    1.0000    0.7810
+    1.0000    0.7334
+    1.0000   -0.5146
+    1.0000   -0.8637
+    1.0000   -0.8894
+    1.0000   -0.9384
+    1.0000    0.7837
+    1.0000   -0.1567
+    1.0000    0.9378
+    1.0000    0.2649
+    1.0000   -0.8185
+    1.0000   -0.9388
+    1.0000   -0.9368
+    1.0000    0.9426
+    1.0000    0.7641
+    1.0000    0.9401
+    1.0000   -0.8363
+    1.0000    0.9367
+    1.0000    0.9412
+    1.0000    0.9427
+    1.0000    0.9186
+    1.0000    0.8010
+    1.0000    0.8277
+    1.0000    0.3836
+    1.0000    0.7987
+
+Error is approximately: 5.7485
+Expected Output After Thresholding
+
+ans =
+
+    -1    -1
+    -1     1
+    -1     1
+    -1     1
+    -1    -1
+    -1     1
+    -1     1
+    -1     1
+    -1    -1
+    -1    -1
+    -1     1
+    -1     1
+    -1    -1
+    -1    -1
+    -1    -1
+    -1    -1
+    -1    -1
+    -1    -1
+    -1    -1
+    -1     1
+    -1    -1
+     1     1
+     1     1
+     1    -1
+     1    -1
+     1    -1
+     1    -1
+     1     1
+     1    -1
+     1     1
+     1     1
+     1    -1
+     1    -1
+     1    -1
+     1     1
+     1     1
+     1     1
+     1    -1
+     1     1
+     1     1
+     1     1
+     1     1
+     1     1
+     1     1
+     1     1
+     1     1
+
+Items Misclassified are: 
+
+misclassified =
+
+    18
+
+</pre><img vspace="5" hspace="5" src="lab3_03.png" alt=""> <img vspace="5" hspace="5" src="lab3_04.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2018a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% LAB 3, Multilayer Neural Networks
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% XOR problem
+clear
+clc
+% inputs to function
+input1 = [-1 -1 1 1].';
+input2 = [-1 1 -1 1].';
+expected = [-1 1 1 -1].';
+eta = 0.1;
+
+% perform gradient descent
+[w, gradient] = backpropgation(input1, input2, expected, eta);
+
+% initialize paramters
+a = 1;
+b = 1;
+f = @(x) a * tanh(b * x);
+n = length(input1.');
+
+w1 = w(:,1);
+w2 = w(:,2);
+wz = w(:,3);
+
+% creating input
+input = [ones(n,1) input1 input2];
+% computing first two neurons
+net1 = input*w1;
+net2 = input*w2;
+
+% calculating sigmoid function
+f1 = f(net1);
+f2 = f(net2);
+
+% computing final neuron
+netz = [ones(n,1) f1 f2]*wz;
+
+% calculating sigmoid function which decides the class
+output = f(netz);
+
+disp('Expected Output')
+[expected output]
+
+% plot the data
+figure
+scatter(input1, input2, 'b*')
+hold on
+min_val = -2;
+max_val = 2;
+% min_val = min([setA(:,2); setB(:,2)]);
+% max_val = max([setA(:,2); setB(:,2)]);
+r = linspace(min_val, max_val, 50);
+d1 = w(1,1) / w(3,1) * r + w(1,1) / w(3,1);
+d2 = w(2,2) / w(3,2) * r + w(1,2) / w(3,2);
+plot(r, d1)
+hold on
+plot(r, d2)
+
+% plot gradient function over epoches
+figure
+plot(gradient)
+
+%% Wine Dataset 
+% Attribute Information for WINE data:
+%
+% 1.  Alcohol
+% 2.  Malic acid
+% 3.  Ash
+% 4.  Alcalinity of ash
+% 5.  Magnesium
+% 6.  Total phenols
+% 7.  Flavanoids
+% 8.  Nonflavanoid phenols
+% 9.  Proanthocyanins
+% 10. Color intensity
+% 11. Hue
+% 12. OD280/OD315 of diluted wines
+% 13. Proline
+
+clc
+
+% read table into array
+T = table2array(readtable('wine.csv'));
+
+% dividing table into section
+wine = [T((T(:,1)==1),1:3); T((T(:,1)==3),1:3)];
+
+% replace class 3 with -1 value
+wine( wine(:,1)==3 ) = -1;
+
+% seperate labels and features
+wine_labels = wine(:,1);
+wine_features = wine(:,2:3);
+
+wine_features = normalize(wine_features);
+
+labels = unique(wine_labels);
+
+wine = [wine_labels wine_features];
+
+% seperate the two sets
+setA = wine(wine_labels(:) == labels(1),:);
+setB = wine(wine_labels(:) == labels(2),:);
+
+% setA(:,2:3) = normalize(setA(:,2:3));
+% setB(:,2:3) = normalize(setB(:,2:3));
+
+% create training set and testing set split ratios for each set
+split_ratio = 0.6;
+m1 = floor((size(setA,1)*split_ratio));
+m2 = floor((size(setB,1)*split_ratio));
+
+% creating the testinfg and training sets
+trainingSet = [setA(1:m1,:) ; setB(1:m2,:)];
+testingSet = [setA(m1:end,:) ; setB(m2:end,:)];
+
+% creating training set inputs
+input1 = trainingSet(:,2);
+input2 = trainingSet(:,3);
+expected = trainingSet(:,1);
+eta = 0.1;
+
+% computing the back propagation algorithm
+% [w, gradient, y_bar] = backpropagation(input1, input2, expected);
+[w, gradient] = backpropgation(input1, input2, expected, eta);
+
+% creating testing set inputs
+input1 = testingSet(:,2);
+input2 = testingSet(:,3);
+expected = testingSet(:,1);
+
+% initializing variables
+a = 1;
+b = 1;
+f = @(x) a * tanh(b * x);
+
+n = length(input1);
+
+% creating input
+input = [ones(n,1) input1 input2];
+
+% computing first two neurons
+net1 = input*w1;
+net2 = input*w2;
+
+% calculating sigmoid function
+f1 = f(net1);
+f2 = f(net2);
+
+% computing final neuron
+netz = [ones(n,1) f1 f2]*wz;
+
+% calculating sigmoid function which decides the class
+output = f(netz);
+
+disp("this is the result")
+result = heaviside(output)
+
+disp('Expected Output')
+[expected output]
+
+disp("Error is approximately: " + num2str(gradient( length(gradient) )))
+
+% thresholding output to either -1 or 1
+output_t = 2 * heaviside(output) - 1;
+
+disp("Expected Output After Thresholding")
+[expected output_t]
+
+disp('Items Misclassified are: ')
+misclassified = sum(abs(expected - output_t))/2
+
+% plot the data
+figure
+scatter(setA(:,2), setA(:,3),'ro')
+hold on
+scatter(setB(:,2), setB(:,3),'b*')
+hold on
+% min_val = -5;
+% max_val = 5;
+min_val = min([setA(:,2); setB(:,2)]);
+max_val = max([setA(:,2); setB(:,2)]);
+r = linspace(min_val, max_val, 50);
+d1 = w(1,1) / w(3,1) * r + w(1,1) / w(3,1);
+d2 = w(2,2) / w(3,2) * r + w(1,2) / w(3,2);
+plot(r, d1)
+hold on
+plot(r, d2)
+
+% plot the gradient function
+figure
+plot(gradient)
+##### SOURCE END #####
+--></body></html>
