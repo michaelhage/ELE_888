@@ -72,6 +72,7 @@ zlabel("Blue Channel")
 title("Final Iteration - Iteration " + n)
 
 % Question C
+% compute Xie-Beni algorithm
 Y = xiebeni(idx(:,n), X, mu, c);
 disp("The Xie-Beni Difference for c=2 is: " + Y);
 
@@ -119,7 +120,7 @@ ylabel("Green Channel")
 zlabel("Blue Channel")
 
 % Question C
-
+% Compute Xie-Beni algorithm
 Y = xiebeni(idx, X, mu, c);
 
 disp("The Xie-Beni Difference for c=5 is: " + Y);
@@ -130,6 +131,7 @@ mu = uint8(mu);
 M = reshape(idx(:),x,y);
 img = uint8(zeros(size(I)));
 
+% map each pixel to its colour space
 for i = 1:x
     for j = 1:y
         img(i,j,:) = mu(:,M(i,j)).';
