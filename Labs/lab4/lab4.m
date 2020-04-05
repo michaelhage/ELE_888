@@ -24,6 +24,7 @@ ylabel("Green Channel")
 zlabel("Blue Channel")
 
 %% Question A
+clc
 
 % initialize number of classes
 c = 2;
@@ -102,6 +103,7 @@ title("Error Across Iterations")
 xlabel("Iterations")
 ylabel("Error")
 %% Question B
+clc
 
 % use kmeans algorithm
 c = 5;
