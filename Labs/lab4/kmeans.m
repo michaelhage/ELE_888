@@ -51,7 +51,8 @@ for i = 1:iter_max
         error(i) = error(i) + sqrt( (X(x,1) - mu(1,idx(x))).^2 + (X(x,2) - mu(2,idx(x))).^2 + (X(x,3) - mu(3,idx(x))).^2 );
     end
     
-    if( sum(mu - mu_new, 'all') == 0 )
+%     if( sum(mu - mu_new, 'all') == 0 )
+    if( sum(sum(mu - mu_new, 'all')) == 0 )
          
         break;
     end

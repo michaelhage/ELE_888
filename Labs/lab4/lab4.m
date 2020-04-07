@@ -43,9 +43,9 @@ iter = ceil((n-1) * rand(1,2));
 
 % earliest iteration portrayed
 figure
-plot3(X(idx(:,min(iter)) == 1,1), X(idx(:,min(iter)) == 1,2), X(idx(:,min(iter)) == 1,3),'.', 'Color','b');
+plot3(X(idx(:,min(iter)) == 1,1), X(idx(:,min(iter)) == 1,2), X(idx(:,min(iter)) == 1,3),'.', 'Color',mu(:,1)/255);
 hold on
-plot3(X( idx(:,min(iter)) == 2 ,1), X(idx(:,min(iter)) == 2,2), X(idx(:,min(iter)) == 2,3),'.', 'Color','g')
+plot3(X( idx(:,min(iter)) == 2 ,1), X(idx(:,min(iter)) == 2,2), X(idx(:,min(iter)) == 2,3),'.', 'Color',mu(:,2)/255)
 hold on
 plot3(mu(1,:), mu(2,:), mu(3,:), '*', 'Color', 'r')
 xlabel("Red Channel")
@@ -55,9 +55,9 @@ title("Iteration " + min(iter))
 
 % middle iteration portrayed
 figure
-plot3(X(idx(:,max(iter)) == 1,1), X(idx(:,max(iter)) == 1,2), X(idx(:,max(iter)) == 1,3),'.', 'Color','b');
+plot3(X(idx(:,max(iter)) == 1,1), X(idx(:,max(iter)) == 1,2), X(idx(:,max(iter)) == 1,3),'.', 'Color',mu(:,1)/255);
 hold on
-plot3(X( idx(:,max(iter)) == 2 ,1), X(idx(:,max(iter)) == 2,2), X(idx(:,max(iter)) == 2,3),'.', 'Color','g')
+plot3(X( idx(:,max(iter)) == 2 ,1), X(idx(:,max(iter)) == 2,2), X(idx(:,max(iter)) == 2,3),'.', 'Color',mu(:,2)/255)
 hold on
 plot3(mu(1,:), mu(2,:), mu(3,:), '*', 'Color', 'r')
 xlabel("Red Channel")
@@ -67,20 +67,15 @@ title("Iteration " + max(iter))
 
 % final iteration portrayed
 figure
-plot3(X(idx(:,n) == 1,1), X(idx(:,n) == 1,2), X(idx(:,n) == 1,3),'.', 'Color','b');
+plot3(X(idx(:,n) == 1,1), X(idx(:,n) == 1,2), X(idx(:,n) == 1,3),'.', 'Color',mu(:,1)/255);
 hold on
-plot3(X( idx(:,n) == 2 ,1), X(idx(:,n) == 2,2), X(idx(:,n) == 2,3),'.', 'Color','g')
+plot3(X( idx(:,n) == 2 ,1), X(idx(:,n) == 2,2), X(idx(:,n) == 2,3),'.', 'Color',mu(:,2)/255)
 hold on
 plot3(mu(1,:), mu(2,:), mu(3,:), '*', 'Color', 'r')
 xlabel("Red Channel")
 ylabel("Green Channel")
 zlabel("Blue Channel")
 title("Final Iteration - Iteration " + n)
-
-% Question C
-% compute Xie-Beni algorithm
-Y = xiebeni(idx(:,n), X, mu, c);
-disp("The Xie-Beni Difference for c=2 is: " + Y);
 
 % convert to unsigned 8-bit integer
 mu = uint8(mu);
@@ -111,37 +106,66 @@ ylabel("Error")
 clc
 
 % use kmeans algorithm
-c = 10;
-[mu, idx, error] = kmeans(X, c);
+c = 5;
+[mu1, idx1, error1] = kmeans(X, c);
+[mu2, idx2, error2] = kmeans(X, c);
 
 % plot domain RGB plot
-color = ['b'; 'g'; 'm'; 'y'; 'k'; 'c'; 'b'; 'g'; 'k'; 'y'];
 figure
 for i = 1:c
-    plot3(X(idx(:) == i,1), X(idx(:) == i,2), X(idx(:) == i,3),'.', 'Color',color(i));
+    plot3(X(idx1(:) == i,1), X(idx1(:) == i,2), X(idx1(:) == i,3),'.', 'Color',mu1(:,i)/255);
     hold on
 end
-plot3(mu(1,:), mu(2,:), mu(3,:), '*', 'Color', 'r')
+plot3(mu1(1,:), mu1(2,:), mu1(3,:), '*', 'Color', 'r')
 xlabel("Red Channel")
 ylabel("Green Channel")
 zlabel("Blue Channel")
 
+figure
+for i = 1:c
+    plot3(X(idx2(:) == i,1), X(idx2(:) == i,2), X(idx2(:) == i,3),'.', 'Color',mu2(:,i)/255);
+    hold on
+end
+plot3(mu2(1,:), mu2(2,:), mu2(3,:), '*', 'Color', 'r')
+xlabel("Red Channel")
+ylabel("Green Channel")
+zlabel("Blue Channel")
+hold off
 % Question C
+
 % Compute Xie-Beni algorithm
-Y = xiebeni(idx, X, mu, c);
+Y1 = xiebeni(idx1, X, mu1, c);
+Y2 = xiebeni(idx2, X, mu2, c);
+disp("The Xie-Beni Difference for the first cluster is: " + Y1);
+disp("The Xie-Beni Difference for the second cluster is: " + Y2);
 
-disp("The Xie-Beni Difference for c=5 is: " + Y);
-
+% cluster 1
 % create domain image
-mu = uint8(mu);
+mu1 = uint8(mu1);
 [x,y,z] = size(I);
-M = reshape(idx(:),x,y);
+M = reshape(idx1(:),x,y);
 img = uint8(zeros(size(I)));
 
 % map each pixel to its colour space
 for i = 1:x
     for j = 1:y
-        img(i,j,:) = mu(:,M(i,j)).';
+        img(i,j,:) = mu1(:,M(i,j)).';
+    end
+end
+
+figure, imshow(img);
+
+% cluster 2
+% create domain image
+mu2 = uint8(mu2);
+[x,y,z] = size(I);
+M = reshape(idx2(:),x,y);
+img = uint8(zeros(size(I)));
+
+% map each pixel to its colour space
+for i = 1:x
+    for j = 1:y
+        img(i,j,:) = mu2(:,M(i,j)).';
     end
 end
 
@@ -149,7 +173,14 @@ figure, imshow(img);
 
 % plot error
 figure
-plot(error, '.-')
+plot(error1, '.-')
+title("Error Across Iterations")
+xlabel("Iterations")
+ylabel("Error")
+
+% plot error
+figure
+plot(error2, '.-')
 title("Error Across Iterations")
 xlabel("Iterations")
 ylabel("Error")

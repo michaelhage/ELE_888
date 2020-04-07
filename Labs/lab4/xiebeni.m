@@ -1,5 +1,5 @@
 function [Y] = xiebeni(idx, X, mu, c)
-%Question C
+% Question C
 
 %     initialize variables
     mu_diff = zeros(c,1);
