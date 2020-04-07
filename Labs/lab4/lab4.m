@@ -16,9 +16,14 @@ dim = size(I);
 X = reshape(I, dim(1) * dim(2), dim(3));
 X = double(X);
 
+% calcultate mean of cluster
+mn = mean( X(:,:));
+
 % plot colorspace
 figure
 plot3(X(:,1), X(:,2), X(:,3),'.', 'Color','b');
+hold on;
+plot3(mn(1), mn(2), mn(3), '*', 'Color', 'r')
 xlabel("Red Channel")
 ylabel("Green Channel")
 zlabel("Blue Channel")
@@ -106,11 +111,11 @@ ylabel("Error")
 clc
 
 % use kmeans algorithm
-c = 5;
+c = 10;
 [mu, idx, error] = kmeans(X, c);
 
 % plot domain RGB plot
-color = ['b'; 'g'; 'm'; 'y'; 'k'];
+color = ['b'; 'g'; 'm'; 'y'; 'k'; 'c'; 'b'; 'g'; 'k'; 'y'];
 figure
 for i = 1:c
     plot3(X(idx(:) == i,1), X(idx(:) == i,2), X(idx(:) == i,3),'.', 'Color',color(i));
