@@ -51,7 +51,7 @@ plot3(mu(1,:), mu(2,:), mu(3,:), '*', 'Color', 'r')
 xlabel("Red Channel")
 ylabel("Green Channel")
 zlabel("Blue Channel")
-title("Iteration " + min(iter))
+title("Iteration " + min(iter) + ": 1.2")
 
 % middle iteration portrayed
 figure
@@ -63,7 +63,7 @@ plot3(mu(1,:), mu(2,:), mu(3,:), '*', 'Color', 'r')
 xlabel("Red Channel")
 ylabel("Green Channel")
 zlabel("Blue Channel")
-title("Iteration " + max(iter))
+title("Iteration " + max(iter) + ": 1.2")
 
 % final iteration portrayed
 figure
@@ -75,8 +75,10 @@ plot3(mu(1,:), mu(2,:), mu(3,:), '*', 'Color', 'r')
 xlabel("Red Channel")
 ylabel("Green Channel")
 zlabel("Blue Channel")
-title("Final Iteration - Iteration " + n)
+title("Final Iteration - Iteration " + n + ": 1.3")
 
+
+% 1.4
 % convert to unsigned 8-bit integer
 mu = uint8(mu);
 
@@ -101,7 +103,7 @@ figure
 plot(error, '.-')
 title("Error Across Iterations")
 xlabel("Iterations")
-ylabel("Error")
+ylabel("Error: 1.1")
 %% Question B
 clc
 
@@ -120,6 +122,7 @@ plot3(mu1(1,:), mu1(2,:), mu1(3,:), '*', 'Color', 'r')
 xlabel("Red Channel")
 ylabel("Green Channel")
 zlabel("Blue Channel")
+title("First Run of Algorithm")
 
 figure
 for i = 1:c
@@ -130,9 +133,10 @@ plot3(mu2(1,:), mu2(2,:), mu2(3,:), '*', 'Color', 'r')
 xlabel("Red Channel")
 ylabel("Green Channel")
 zlabel("Blue Channel")
+title("Second Run of Algorithm")
 hold off
-% Question C
 
+% Question C
 % Compute Xie-Beni algorithm
 Y1 = xiebeni(idx1, X, mu1, c);
 Y2 = xiebeni(idx2, X, mu2, c);
